@@ -1,0 +1,1 @@
+export default ["applicationci", "portfolio", "director", "srManager", "contacts", "account", "applicationName"];
