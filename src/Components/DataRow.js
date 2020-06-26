@@ -9,20 +9,19 @@ import { Input, TextArea, Form } from "semantic-ui-react";
 import AutosizeInput from "react-input-autosize";
 
 class Input0 extends Component {
-  state = { val: this.props.label, data: {}};
+  state = { val: this.props.id, data: {}};
 
   handleChange = (event) => {
     this.setState({ val: event.target.value });
   };
 
   render = () => {
-    if(this.state.data!==this.props.data[0]){
-        if (!(this.props.label in this.props.data[0])) {
+    console.log(this.props.data.data[this.props.id]);
+    if(this.state.data!==this.props.data.data){
+        if (!(this.props.label in this.props.data.data)) {
             this.setState({ val: "N/A" });
-        } else if ("S" in this.props.data[0][this.props.label]) {
-            this.setState({ val: this.props.data[0][this.props.label]["S"] });
-        }
-        this.setState({data: this.props.data[0]});
+        } 
+        this.setState({data: this.props.data.data, val:this.props.data.data[this.props.id]});
     }
     return (
       <div>
@@ -42,21 +41,14 @@ class Input0 extends Component {
 }
 
 class Input1 extends Component {
-  state = { val: this.props.label, data: this.props.data[0] };
+  state = { val: this.props.label, data: this.props.data.data };
 
   handleChange = (event) => {
     this.setState({ val: event.target.value });
   };
 
   render = () => {
-    if(this.state.data!==this.props.data[0]){
-        let str = "";
-      this.props.data[0][this.props.label]["L"].forEach((it) => {
-        str += it["S"] + ", ";
-      });
-        this.setState({val: str.slice(0, str.length - 2)})
-        this.setState({data: this.props.data[0]});
-    }
+
     return (
       <div>
         <TextArea
@@ -78,11 +70,12 @@ class Input1 extends Component {
 class DataRow extends Component {
   componentDidMount() {
     //this.props.fetchData("applicationci", this.props.row.num);
+    console.log(this.props.data.data);
   }
 
   handleSubmit = (event) => {
     let object=this.props.form.Changer.values || {};
-    object.applicationci=this.props.row.num;
+    object[ids[0]]=this.props.row.num;
     this.props.changeData(object);
     this.props.fetchData("", "");
   };
@@ -90,6 +83,7 @@ class DataRow extends Component {
   Helper = () => {
     return ids.map((id) => {
         if(id===ids[0]){
+          console.log(this.props.data.data[id]);
             return (
                 <div className="field" style={{ width: "50%" }}>
                   <label>{id}</label>
@@ -98,12 +92,12 @@ class DataRow extends Component {
                     name={id}
                     type="text"
                     id={id}
-                    value={this.props.data[0][id]["S"]}
+                    value={this.props.data.data[id]}
                   />
                 </div>
             );
         }
-      if (!(id in this.props.data[0]) || "S" in this.props.data[0][id]) {
+        console.log(this.props.data.data[id]);
         return (
           <div className="field" style={{ width: "50%" }}>
             <label>{id}</label>
@@ -116,20 +110,8 @@ class DataRow extends Component {
             />
           </div>
         );
-      }
+      
 
-      return (
-        <div className="field" style={{ width: "50%" }}>
-          <label>{id}</label>
-          <Field
-            name={id}
-            type="text"
-            component={Input1}
-            id={id}
-            label={id}
-          />
-        </div>
-      );
     });
   };
 
@@ -167,7 +149,6 @@ class DataRow extends Component {
           style={{ marginLeft: "10px" }}
           onClick={() => {
             this.props.deleteData(this.props.row.num);
-            this.props.rowClick({ link: "/table", num: 0 });
             this.props.rowClick({ link: "/table", num: 0 });
           }}
         >

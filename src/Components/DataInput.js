@@ -26,8 +26,13 @@ let DataInput = (props) => {
   const { pristine, reset, submitting } = props;
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log('Submitted!');
-    props.fetchData(props.form.data.values.key,props.form.data.values.value);
+  }
+  const handleChange = (event) => {
+    //event.preventDefault();
+    //console.log('Submitted!');
+    //console.log(props.form.data.values.value);
+    //props.queryData(props.form.data.values.key,props.form.data.values.value);
+    //console.log(props.form.data.values.key+","+props.form.data.values.value);
   }
 
   return (
@@ -47,22 +52,15 @@ let DataInput = (props) => {
             component="input"
             type="text"
             placeholder="value"
+            onChange={handleChange}
           />
             </div>
-            <button className="ui button" type="submit" disabled={pristine || submitting}>
-          Submit
-        </button>
-        <button className="ui button" type="submit" onClick={() => {
-            reset();
-            props.fetchData("","");
-            }} disabled={pristine || submitting}>
-          Reset
-        </button>
         <button className="ui button" type="reset" onClick={() => {
             //reset();
             //props.fetchData("","");
             reset();
-            props.rowClick({ link: "/add", num: 0 });
+            //console.log(props);
+            props.rowClick({ link: "/add", num: ""});
             }}>
           Add item
         </button>
